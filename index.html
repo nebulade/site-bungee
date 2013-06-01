@@ -1,0 +1,101 @@
+<html>
+<head>
+    <title> Bungee.js </title>
+
+    <link rel="Stylesheet" href="main.css"/>
+
+    <script type="text/javascript" src="bungee.js"></script>
+
+    <script type="text/jml">
+
+        Tab @ Item {
+            backgroundColor: this.parent.color
+            opacity: this.modelData / this.parent.count
+            width: this.parent.width - 20
+            left: 10
+            height: 30
+            tmpPos: (this.modelData * this.parent.height / this.parent.count) / this.parent.height;
+            top: this.parent.mouseAbsY * this.tmpPos;
+
+            Behavior {
+                top: "500ms cubic-bezier(0.175, 0.885, 0.320, 1.275)"
+            }
+        }
+
+        Expander @ InputItem {
+            top: 0
+            left: 10
+            width: 100
+            height: this.parent.height
+            tabDelegate: Tab;
+            count: 10
+            startPos: 0
+
+            onload: ^{
+                var that = this
+                for (var i = 0; i < this.count; ++i) {
+                    var child = this.createtabDelegate();
+                    child.modelData = i;
+                    this.addChild(child);
+                    child.initializeBindings();
+                }
+
+                window.setTimeout(function() {
+                    that.mouseAbsY = that.startPos;
+                }, 1500);
+            }^
+        }
+
+        Window {
+            top: -50
+            left: this.width - 500
+            width: this.innerWidth
+            height: this.innerHeight
+
+            Expander {
+                left: 0
+                color: "#41DF22"
+                startPos: 420
+            }
+
+            Expander {
+                left: 100
+                color: "#36A7DF"
+                startPos: 600
+            }
+
+            Expander {
+                left: 200
+                color: "#DF2F9C"
+                startPos: 350
+            }
+
+            Expander {
+                left: 300
+                color: "yellow"
+                startPos: 460
+            }
+        }
+
+    </script>
+
+</head>
+
+<body onload="Bungee.run();">
+
+    <h1>Bungee.js</h2>
+
+    <a href="#">Introduction</a>
+    <a href="#">Documentation</a>
+    <a href="https://github.com/nebulon1234/bungee">Source</a>
+
+    <script>
+
+        window.document.body.ontouchmove = function (event) {
+            event.preventDefault();
+        }
+
+    </script>
+
+</body>
+</html>
