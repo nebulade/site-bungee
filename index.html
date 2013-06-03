@@ -77,6 +77,61 @@
             }
         }
 
+        Content @ Item {
+            width: 700
+            height: window.innerHeight - 100
+            top: 70
+            left: -(this.width + this.margin)
+            margin: 10
+            text: ""
+
+            Text {
+                id: content
+                width: this.parent.width
+                fontFamily: "'Maven Pro',Arial,Helvetica,sans-serif"
+                fontWeight: 300
+                fontSize: "18px"
+                color: "white"
+                text: this.parent.text
+            }
+
+            Behavior {
+                left: "500ms cubic-bezier(0.175, 0.885, 0.320, 1.275)"
+            }
+        }
+
+        Content {
+            id: containerIntroduction
+            text: document.getElementById('contentIntroduction').innerHTML
+
+            onload: ^{
+                var that = this;
+                window.setTimeout(function () {
+                    that.left = "10px";
+                }, 500);
+            }^
+        }
+
+        Content {
+            id: containerGettingStarted
+            text: document.getElementById('contentGettingStarted').innerHTML
+        }
+
+        Content {
+            id: containerAbout
+            text: document.getElementById('contentAbout').innerHTML
+        }
+
+    </script>
+
+    <script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
+    <script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJScript.js"></script>
+    <script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushXml.js"></script>
+    <link type="text/css" rel="stylesheet" href="syntaxhighlighter_3.0.83/styles/shThemeRDark.css"/>
+    <script type="text/javascript">
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.defaults['toolbar'] = false;
+        SyntaxHighlighter.all();
     </script>
 
 </head>
@@ -85,11 +140,46 @@
 
     <h1>bungee.js</h2>
 
-    <h2>
+    <h3>
         <a href="#">Introduction</a>
         <a href="#">Documentation</a>
         <a href="https://github.com/nebulon1234/bungee">Source</a>
-    </h2>
+    </h3>
+
+    <div id="contentIntroduction" class="content">
+        <h2> Introduction </h2>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.
+    </div>
+
+    <div id="contentGettingStarted" class="content">
+        <h2> Getting Started </h2>
+        Online compilation. Include bungee.js into your website and initialize all script tags of type "text/jml".
+        <pre class="brush: html; class-name: 'highlighterAdjustment'">
+                &lt;script type="text/javascript" src="bungee.js">&lt;/script>
+                ...
+                &lt;script type="text/jml">
+                    Item {
+                    }
+                &lt;/script>
+                ...
+                &lt;body onload="Bungee.run();">
+        </pre>
+
+        Simple green rectangle example:
+        <pre class="brush: js; class-name: 'highlighterAdjustment'">
+            Item {
+                width: 100
+                height: 50
+                backgroundColor: "green"
+            }
+        </pre>
+
+    </div>
+
+    <div id="contentAbout" class="content">
+        <h2> About </h2>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.
+    </div>
 
     <footer>
         bungee.js is a project developed by <a href="https://github.com/nebulon1234">Johannes Zellner</a> 2013.<br/>
