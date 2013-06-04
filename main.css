@@ -76,6 +76,10 @@ footer {
     overflow-y: scroll;
 }
 
+.hidden {
+    visibility: hidden;
+}
+
 .highlighterAdjustment {
     padding: 10px;
 }

@@ -6,7 +6,7 @@
 
     <script type="text/javascript" src="bungee.js"></script>
 
-    <script type="text/jml">
+    <script type="text/jml" module="main">
 
         Tab @ Item {
             backgroundColor: this.parent.color
@@ -103,13 +103,6 @@
         Content {
             id: containerIntroduction
             text: document.getElementById('contentIntroduction').innerHTML
-
-            onload: ^{
-                var that = this;
-                window.setTimeout(function () {
-                    that.left = "10px";
-                }, 500);
-            }^
         }
 
         Content {
@@ -128,57 +121,85 @@
     <script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJScript.js"></script>
     <script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushXml.js"></script>
     <link type="text/css" rel="stylesheet" href="syntaxhighlighter_3.0.83/styles/shThemeRDark.css"/>
+
     <script type="text/javascript">
+
         SyntaxHighlighter.defaults['gutter'] = false;
         SyntaxHighlighter.defaults['toolbar'] = false;
         SyntaxHighlighter.all();
+
+        window.app = {};
+        window.app.currentContent = undefined;
+
+        function init() {
+            Bungee.run();
+            app.ui = Bungee.main();
+
+            window.setTimeout(function () {
+                showContent('containerIntroduction');
+            }, 500);
+        }
+
+        function showContent(id) {
+            if (app.currentContent) {
+                app.currentContent.left = -1000;
+            }
+
+            app.currentContent = app.ui[id];
+            app.currentContent.left = 10;
+        }
+
     </script>
 
 </head>
 
-<body onload="Bungee.run();">
+<body onload="init();">
 
     <h1>bungee.js</h2>
 
     <h3>
-        <a href="#">Introduction</a>
-        <a href="#">Documentation</a>
+        <a href="javascript: showContent('containerIntroduction');">Introduction</a>
+        <a href="javascript: showContent('containerGettingStarted');">GettingStarted</a>
+        <a href="javascript: showContent('containerAbout');">About</a>
         <a href="https://github.com/nebulon1234/bungee">Source</a>
     </h3>
 
-    <div id="contentIntroduction" class="content">
-        <h2> Introduction </h2>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.
-    </div>
+    <!-- Content area, this is not visible like this, acts as a template -->
+    <div class="hidden">
+        <div id="contentIntroduction">
+            <h2> Introduction </h2>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.
+        </div>
 
-    <div id="contentGettingStarted" class="content">
-        <h2> Getting Started </h2>
-        Online compilation. Include bungee.js into your website and initialize all script tags of type "text/jml".
-        <pre class="brush: html; class-name: 'highlighterAdjustment'">
-                &lt;script type="text/javascript" src="bungee.js">&lt;/script>
-                ...
-                &lt;script type="text/jml">
-                    Item {
-                    }
-                &lt;/script>
-                ...
-                &lt;body onload="Bungee.run();">
-        </pre>
+        <div id="contentGettingStarted">
+            <h2> Getting Started </h2>
+            Online compilation. Include bungee.js into your website and initialize all script tags of type "text/jml".
+            <pre class="brush: html; class-name: 'highlighterAdjustment'">
+                    &lt;script type="text/javascript" src="bungee.js">&lt;/script>
+                    ...
+                    &lt;script type="text/jml">
+                        Item {
+                        }
+                    &lt;/script>
+                    ...
+                    &lt;body onload="Bungee.run();">
+            </pre>
 
-        Simple green rectangle example:
-        <pre class="brush: js; class-name: 'highlighterAdjustment'">
-            Item {
-                width: 100
-                height: 50
-                backgroundColor: "green"
-            }
-        </pre>
+            Simple green rectangle example:
+            <pre class="brush: js; class-name: 'highlighterAdjustment'">
+                Item {
+                    width: 100
+                    height: 50
+                    backgroundColor: "green"
+                }
+            </pre>
 
-    </div>
+        </div>
 
-    <div id="contentAbout" class="content">
-        <h2> About </h2>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.
+        <div id="contentAbout">
+            <h2> About </h2>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.
+        </div>
     </div>
 
     <footer>
