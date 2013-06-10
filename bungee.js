@@ -31,7 +31,12 @@ var tokenizer = (function () {
         var token = "";
 
         while (c) {
-            if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
+            if (c === '\n') {
+                i -= 1;
+                break;
+            }
+
+            if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c === '_' || c === '-')
                 token += c;
             else
                 break;
@@ -47,7 +52,7 @@ var tokenizer = (function () {
         var expression = "";
 
         while (c) {
-            if (c === '\n' || c === ';') {
+            if (c === '\n') {
                 i -= 1;
                 break;
             }
@@ -122,7 +127,7 @@ var tokenizer = (function () {
                 continue;
             }
 
-            if (c === '\n' || c === ';') {
+            if (c === '\n') {
                 comment = false;
                 colonOnLine = false;
 
@@ -925,8 +930,12 @@ Bungee.Text = function (id, parent) {
 
 Bungee.Window = function (id, parent) {
     var elem = new Bungee.Element(id, parent);
+
     elem.addProperty("innerWidth", window.innerWidth);
     elem.addProperty("innerHeight", window.innerHeight);
+
+    elem.addProperty("width", function () { return this.innerWidth; });
+    elem.addProperty("height", function () { return this.innerHeight; });
 
     elem.addEventHandler("load", function () {
         var that = this;
@@ -1015,8 +1024,10 @@ Bungee.RendererDOM.prototype.createElement = function (typeHint, object) {
         elem = document.createElement('img');
     } else {
         elem = document.createElement('div');
-        elem.style.position = 'absolute';
     }
+
+    // initialize basic css attributes
+    elem.style.position = 'absolute';
 
     // set id attribute
     if (object.id) {
@@ -1587,13 +1598,18 @@ if (!Bungee.Engine) {
         var getterCalled = {};
         var _dirtyElements = {};
 
-        ret.magicBindingState = false;
         ret.verbose = false;
         ret._elementIndex = 0;
 
         function log(msg, error) {
             if (ret.verbose || error) {
                 console.log("[Bungee.Engine] " + msg);
+            }
+        }
+
+        function maybeReportGetterCalled(silent, name) {
+            if (!silent) {
+                Bungee.Engine.addCalledGetter(this, name);
             }
         }
 
@@ -1618,15 +1634,21 @@ if (!Bungee.Engine) {
         ret.enterMagicBindingState = function () {
             log("enterMagicBindingState");
             getterCalled = {};
-            ret.magicBindingState = true;
+            ret.maybeReportGetterCalled = maybeReportGetterCalled;
         };
 
         // end binding detection
         ret.exitMagicBindingState = function () {
             log("exitMagicBindingState\n\n");
-            ret.magicBindingState = false;
+            ret.maybeReportGetterCalled = function () {};
             return getterCalled;
         };
+
+        /**
+         * Dynamically replaced function responsible for instrumenting bindings
+         * during the binding evaluation stage.
+         */
+        ret.maybeReportGetterCalled = function () {};
 
         ret.addCalledGetter = function (element, property) {
             getterCalled[element.id + "." + property] = { element: element, property: property };
@@ -1716,9 +1738,7 @@ Bungee.Element = function (id, parent, typeHint) {
 };
 
 Bungee.Element.prototype.children = function () {
-    if (Bungee.Engine.magicBindingState) {
-        Bungee.Engine.addCalledGetter(this, 'children');
-    }
+    Bungee.Engine.maybeReportGetterCalled.call(this, false, 'children');
 
     return this._children;
 };
@@ -1800,21 +1820,35 @@ Bungee.Element.prototype.removeChanged = function (obj, signal) {
     }
 };
 
-Bungee.Element.prototype.addBinding = function (name, value) {
+Bungee.Element.prototype.addBinding = function (name, value, property) {
     var that = this;
     var hasBinding = false;
+    var val, getters;
+    var bindingFunction;
 
     // FIXME does not catch changing conditions in expression
     //  x: mouseArea.clicked ? a.y() : b:z();
     Bungee.Engine.enterMagicBindingState();
-    var val = value.apply(this);
-    var getters = Bungee.Engine.exitMagicBindingState();
+
+    if (typeof value === 'function') {
+        val = value.apply(this);
+
+        bindingFunction = function() {
+            that[name] = value.apply(that);
+        };
+    } else if (typeof value === 'object' && typeof property !== 'undefined') {
+        val = value[property];
+
+        bindingFunction = function() {
+            that[name] = value[property];
+        };
+    } else {
+        val = value;
+    }
+    getters = Bungee.Engine.exitMagicBindingState();
 
     this.breakBindings(name);
 
-    var bindingFunction = function() {
-        that[name] = value.apply(that);
-    };
 
     // store found bindings
     for (var getter in getters) {
@@ -1915,8 +1949,7 @@ Bungee.Element.prototype.addProperty = function (name, value) {
             get: function (silent) {
                 // console.log("getter: ", that.id, name);
 
-                if (!silent && Bungee.Engine.magicBindingState)
-                    Bungee.Engine.addCalledGetter(that, name);
+                Bungee.Engine.maybeReportGetterCalled.call(that, silent, name);
 
                 if (typeof valueStore === 'function')
                     return valueStore.apply(that);
@@ -1996,4 +2029,14 @@ Bungee.Element.prototype.emit = function (signal) {
             }
         }
     }
+};
+
+/*
+ **************************************************
+ * Basic non visual Elements
+ **************************************************
+ */
+Bungee.Collection = function (id, parent) {
+    var elem = new Bungee.Element(id, parent, "object");
+    return elem;
 };
