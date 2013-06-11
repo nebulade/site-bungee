@@ -2,7 +2,7 @@
 @import url(http://fonts.googleapis.com/css?family=Maven+Pro);
 
 body, html {
-    background-color: #111111;
+    /*background-color: black;*/
     color: #36A7DF;
     font-family: "Maven Pro",Arial,Helvetica,sans-serif;
     font-weight: 300;
@@ -25,6 +25,7 @@ h2 {
     font-weight: 300;
     font-size: 24px;
     margin: 10px;
+    color: #006B9F;
 }
 
 h3, h4, h5 {
@@ -81,5 +82,5 @@ footer {
 }
 
 .highlighterAdjustment {
-    padding: 10px;
+    width: 500px;
 }

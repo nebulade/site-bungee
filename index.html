@@ -47,23 +47,25 @@
         }
 
         Content @ Item {
-            width: 700
-            height: this.parent.innerHeight - 110
-            top: 70
-            left: -(this.width + this.margin)
-            margin: 10
+            width: this.parent.width - this.leftOffset
+            height: this.parent.innerHeight - 150
+            top: 100
+            left: -this.width
             content: ""
             text: document.getElementById('content' + this.content).innerHTML
             overflowY: "auto"
             overflowX: "hidden"
+            color: "black"
+            leftOffset: 20
+            contentWidth: 700
 
             Text {
                 id: content
-                width: this.parent.width
+                width: this.parent.contentWidth
                 fontFamily: "'Maven Pro',Arial,Helvetica,sans-serif"
                 fontWeight: 300
                 fontSize: "16px"
-                color: "white"
+                color: this.parent.color
                 text: this.parent.text
             }
 
@@ -78,6 +80,12 @@
             left: 0
             width: this.innerWidth
             height: this.innerHeight
+            currentContent: undefined
+            backgroundColor: this.currentContent === this.containerLearn ? "black" : "white"
+
+            Behavior {
+                background-color: "3000ms cubic-bezier(0.175, 0.885, 0.320, 1.275)"
+            }
 
             Item {
                 top: -50
@@ -110,6 +118,13 @@
                 }
             }
 
+            Text {
+                left: 10
+                top: 10
+                text: "bungee.js"
+                fontSize: "40px"
+            }
+
             Content {
                 id: containerIntroduction
                 content: "Introduction"
@@ -118,6 +133,7 @@
             Content {
                 id: containerLearn
                 content: "Learn"
+                color: "white"
             }
 
             Content {
@@ -180,13 +196,31 @@
                     onactivated: window.location.href = "https://github.com/nebulon1234/bungee"
                 }
             }
+
+            Item {
+                top: this.parent.height - this.height
+                left: 0
+                width: this.parent.width
+                height: this.contentText.height + 10
+                backgroundColor: "black"
+
+                Text {
+                    id: contentText
+                    top: this.parent.height/2 - this.height/2
+                    width: this.parent.width
+                    fontSize: "13px"
+                    color: "white"
+                    textAlign: "center"
+                    text: document.getElementById('footer').innerHTML
+                }
+            }
         }
     </script>
 
     <script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
     <script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJScript.js"></script>
     <script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushXml.js"></script>
-    <link type="text/css" rel="stylesheet" href="syntaxhighlighter_3.0.83/styles/shThemeRDark.css"/>
+    <link type="text/css" rel="stylesheet" href="syntaxhighlighter_3.0.83/styles/shThemeEclipse.css"/>
 
     <script type="text/javascript">
 
@@ -195,15 +229,14 @@
         SyntaxHighlighter.all();
 
         window.app = {};
-        window.app.currentContent = undefined;
 
         function showContent(id) {
-            if (app.currentContent) {
-                app.currentContent.left = -1000;
+            if (app.ui.root.currentContent) {
+                app.ui.root.currentContent.left = -app.ui.root.innerWidth;
             }
 
-            app.currentContent = app.ui.root[id];
-            app.currentContent.left = 10;
+            app.ui.root.currentContent = app.ui.root[id];
+            app.ui.root.currentContent.left = app.ui.root.currentContent.leftOffset;
         }
 
         function init() {
@@ -221,8 +254,6 @@
 
 <body onload="init();">
 
-    <h1>bungee.js</h2>
-
     <!-- Content area, this is not visible like this, acts as a template -->
     <div class="hidden">
         <div id="contentIntroduction">
@@ -232,8 +263,8 @@
 
         <div id="contentLearn">
             <h2> Learn - Getting Started </h2>
-            Online compilation. Include bungee.js into your website and initialize all script tags of type "text/jml".
-            <pre class="brush: html">
+            <p>Online compilation. Include bungee.js into your website and initialize all script tags of type "text/jml".</p>
+            <pre class="brush: html; class-name: 'highlighterAdjustment'">
                     &lt;script type="text/javascript" src="bungee.js">&lt;/script>
                     ...
                     &lt;script type="text/jml">
@@ -245,8 +276,8 @@
             </pre>
             <br/>
             <h2> Learn - The language </h2>
-            Simple green rectangle example:
-            <pre class="brush: js">
+            <p>Simple green rectangle example:</p>
+            <pre class="brush: js; class-name: 'highlighterAdjustment'">
                 Item {
                     width: 100
                     height: 50
@@ -254,8 +285,8 @@
                 }
             </pre>
             <br/>
-            Creating your own types:
-            <pre class="brush: js">
+            <p>Creating your own types:</p>
+            <pre class="brush: js; class-name: 'highlighterAdjustment'">
                 MyItem @ Item {
                     width: 100
                     height: 50
@@ -271,8 +302,8 @@
                 }
             </pre>
             <br/>
-            Add custom properties:
-            <pre class="brush: js">
+            <p>Add custom properties:</p>
+            <pre class="brush: js; class-name: 'highlighterAdjustment'">
                 Item {
                     width: 100
                     height: 50
@@ -288,12 +319,12 @@
             In progress...
         </div>
 
-    </div>
+        <div id="footer">
+            bungee.js is a project developed by <a href="https://github.com/nebulon1234">Johannes Zellner</a> 2013.<br/>
+            Code licensed under the <a href="https://github.com/nebulon1234/bungee/blob/master/LICENSE">The MIT License</a>. Documentation licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.
+        </div>
 
-    <footer>
-        bungee.js is a project developed by <a href="https://github.com/nebulon1234">Johannes Zellner</a> 2013.<br/>
-        Code licensed under the <a href="https://github.com/nebulon1234/bungee/blob/master/LICENSE">The MIT License</a>. Documentation licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.
-    </footer>
+    </div>
 
 </body>
 </html>
