@@ -51,8 +51,8 @@
             height: this.parent.innerHeight - 150
             top: 100
             left: -this.width
-            content: ""
-            text: document.getElementById('content' + this.content).innerHTML
+            contentElement: ""
+            text: window.document.getElementById('content' + this.contentElement).innerHTML
             overflowY: "auto"
             overflowX: "hidden"
             color: "black"
@@ -60,7 +60,6 @@
             contentWidth: 700
 
             Text {
-                id: content
                 width: this.parent.contentWidth
                 fontFamily: "'Maven Pro',Arial,Helvetica,sans-serif"
                 fontWeight: 300
@@ -127,18 +126,18 @@
 
             Content {
                 id: containerIntroduction
-                content: "Introduction"
+                contentElement: "Introduction"
             }
 
             Content {
                 id: containerLearn
-                content: "Learn"
+                contentElement: "Learn"
                 color: "white"
             }
 
             Content {
                 id: containerDocumentation
-                content: "Documentation"
+                contentElement: "Documentation"
             }
 
             Link @ InputItem {
@@ -234,6 +233,7 @@
             if (app.ui.root.currentContent) {
                 app.ui.root.currentContent.left = -app.ui.root.innerWidth;
             }
+
 
             app.ui.root.currentContent = app.ui.root[id];
             app.ui.root.currentContent.left = app.ui.root.currentContent.leftOffset;
