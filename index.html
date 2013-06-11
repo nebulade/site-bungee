@@ -4,7 +4,7 @@
 
     <link rel="Stylesheet" href="main.css"/>
 
-    <script type="text/javascript" src="bungee.js"></script>
+    <script type="text/javascript" src="bungee.min.js"></script>
 
     <script type="text/jml" module="main">
 
@@ -46,45 +46,16 @@
             }^
         }
 
-        Window {
-            top: -50
-            left: this.innerWidth - this.width
-            width: 500
-            height: this.innerHeight
-
-            Expander {
-                left: 0
-                color: "#41DF22"
-                startPos: 420
-            }
-
-            Expander {
-                left: 100
-                color: "#36A7DF"
-                startPos: 600
-            }
-
-            Expander {
-                left: 200
-                color: "#DF2F9C"
-                startPos: 350
-            }
-
-            Expander {
-                left: 300
-                color: "yellow"
-                startPos: 460
-            }
-        }
-
         Content @ Item {
             width: 700
-            height: window.innerHeight - 110
+            height: this.parent.innerHeight - 110
             top: 70
             left: -(this.width + this.margin)
             margin: 10
-            text: ""
-            overflow: "auto"
+            content: ""
+            text: document.getElementById('content' + this.content).innerHTML
+            overflowY: "auto"
+            overflowX: "hidden"
 
             Text {
                 id: content
@@ -101,89 +72,115 @@
             }
         }
 
-        Content {
-            id: containerIntroduction
-            text: document.getElementById('contentIntroduction').innerHTML
+        Window {
+            id: root
+            top: 0
+            left: 0
+            width: this.innerWidth
+            height: this.innerHeight
+
+            Item {
+                top: -50
+                left: this.parent.innerWidth - this.width
+                width: 500
+                height: this.parent.innerHeight
+
+                Expander {
+                    left: 0
+                    color: "#41DF22"
+                    startPos: 420
+                }
+
+                Expander {
+                    left: 100
+                    color: "#36A7DF"
+                    startPos: 600
+                }
+
+                Expander {
+                    left: 200
+                    color: "#DF2F9C"
+                    startPos: 350
+                }
+
+                Expander {
+                    left: 300
+                    color: "yellow"
+                    startPos: 460
+                }
+            }
+
+            Content {
+                id: containerIntroduction
+                content: "Introduction"
+            }
+
+            Content {
+                id: containerLearn
+                content: "Learn"
+            }
+
+            Content {
+                id: containerDocumentation
+                content: "Documentation"
+            }
+
+            Link @ InputItem {
+                label: ""
+                width: this.textItem.width
+                height: this.textItem.height
+                cursor: "pointer"
+                backgroundColor: this.containsMouse ? "#36A7DF" : "transparent"
+
+                Behavior {
+                    background-color: "250ms"
+                }
+
+                Text {
+                    id: textItem
+                    text: this.parent.label
+                    fontFamily: "'Maven Pro',Arial,Helvetica,sans-serif"
+                    fontWeight: 300
+                    fontSize: "18px"
+                    color: this.parent.mousePressed ? "#41DF22" : (this.parent.containsMouse ? "black" : "#36A7DF")
+                }
+            }
+
+            Item {
+                top: 50
+                left: 20
+                width: this.childrenWidth
+                height: this.childrenHeight
+
+                Link {
+                    id: link0
+                    left: 0
+                    label: "Introduction"
+                    onactivated: showContent('containerIntroduction');
+                }
+
+                Link {
+                    id: link1
+                    left: this.link0.width + this.link0.left + 10
+                    label: "Learn"
+                    onactivated: showContent('containerLearn');
+                }
+
+                Link {
+                    id: link2
+                    left: this.link1.width + this.link1.left + 10
+                    label: "Documentation"
+                    onactivated: showContent('containerDocumentation');
+                }
+
+                Link {
+                    id: link3
+                    left: this.link2.width + this.link2.left + 10
+                    label: "Source"
+                    onactivated: window.location.href = "https://github.com/nebulon1234/bungee"
+                }
+            }
         }
-
-        Content {
-            id: containerLearn
-            text: document.getElementById('contentLearn').innerHTML
-        }
-
-        Content {
-            id: containerDocumentation
-            text: document.getElementById('contentDocumentation').innerHTML
-        }
-
-        // Content {
-        //     id: containerAbout
-        //     text: document.getElementById('contentAbout').innerHTML
-        // }
-
-        Link @ InputItem {
-            label: ""
-            width: this.textItem.width
-            height: this.textItem.height
-            cursor: "pointer"
-            backgroundColor: this.containsMouse ? "#36A7DF" : "transparent"
-
-            Behavior {
-                background-color: "250ms"
-            }
-
-            Text {
-                id: textItem
-                text: this.parent.label
-                fontFamily: "'Maven Pro',Arial,Helvetica,sans-serif"
-                fontWeight: 300
-                fontSize: "18px"
-                color: this.parent.mousePressed ? "#41DF22" : (this.parent.containsMouse ? "black" : "#36A7DF")
-            }
-        }
-
-        Item {
-            top: 50
-            left: 20
-            width: this.childrenWidth
-            height: this.childrenHeight
-
-            Link {
-                id: link0
-                left: 0
-                label: "Introduction"
-                onactivated: showContent('containerIntroduction');
-            }
-
-            Link {
-                id: link1
-                left: this.link0.width + this.link0.left + 10
-                label: "Learn"
-                onactivated: showContent('containerLearn');
-            }
-
-            Link {
-                id: link2
-                left: this.link1.width + this.link1.left + 10
-                label: "Documentation"
-                onactivated: showContent('containerDocumentation');
-            }
-
-            Link {
-                id: link3
-                left: this.link2.width + this.link2.left + 10
-                label: "Source"
-                onactivated: window.location.href = "https://github.com/nebulon1234/bungee"
-            }
-
-            // Link {
-            //     id: link4
-            //     left: this.link3.width + this.link3.left + 10
-            //     label: "About"
-            //     onactivated: showContent('containerAbout');
-            // }
-        }
-
     </script>
 
     <script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
@@ -200,22 +197,22 @@
         window.app = {};
         window.app.currentContent = undefined;
 
-        function init() {
-            Bungee.run();
-            app.ui = Bungee.main();
-
-            window.setTimeout(function () {
-                showContent('containerIntroduction');
-            }, 500);
-        }
-
         function showContent(id) {
             if (app.currentContent) {
                 app.currentContent.left = -1000;
             }
 
-            app.currentContent = app.ui[id];
+            app.currentContent = app.ui.root[id];
             app.currentContent.left = 10;
+        }
+
+        function init() {
+            Bungee.jump();
+            app.ui = Bungee.main();
+
+            window.setTimeout(function () {
+                showContent('containerIntroduction');
+            }, 500);
         }
 
     </script>
@@ -244,7 +241,7 @@
                         }
                     &lt;/script>
                     ...
-                    &lt;body onload="Bungee.run();">
+                    &lt;body onload="Bungee.jump();">
             </pre>
             <br/>
             <h2> Learn - The language </h2>
@@ -291,10 +288,6 @@
             In progress...
         </div>
 
-<!--         <div id="contentAbout">
-            <h2> About </h2>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.
-        </div> -->
     </div>
 
     <footer>
