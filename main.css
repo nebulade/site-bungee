@@ -1,9 +1,6 @@
-/*@import url(http://fonts.googleapis.com/css?family=Open+Sans);*/
 @import url(http://fonts.googleapis.com/css?family=Maven+Pro);
 
 body, html {
-    /*background-color: black;*/
-    color: #36A7DF;
     font-family: "Maven Pro",Arial,Helvetica,sans-serif;
     font-weight: 300;
     width: 100%;
@@ -13,26 +10,12 @@ body, html {
     overflow: hidden;
 }
 
-h1 {
-    font-family: "Maven Pro",Arial,Helvetica,sans-serif;
-    font-weight: 300;
-    font-size: 32px;
-    margin: 10px;
-}
-
 h2 {
     font-family: "Maven Pro",Arial,Helvetica,sans-serif;
     font-weight: 300;
     font-size: 24px;
     margin: 10px;
     color: #006B9F;
-}
-
-h3, h4, h5 {
-    font-family: "Maven Pro",Arial,Helvetica,sans-serif;
-    font-weight: 300;
-    font-size: 16px;
-    margin: 10px;
 }
 
 a:link {
@@ -50,31 +33,6 @@ a:hover {
 
 a:active {
     color: #41DF22;
-}
-
-footer {
-    font-family: "Maven Pro",Arial,Helvetica,sans-serif;
-    font-weight: 300;
-    font-size: 13px;
-    position: absolute;
-    bottom: 0;
-    color: white;
-    text-align: center;
-    width: 100%;
-    background-color: #111111;
-}
-
-.content {
-    visibility: hidden;
-    font-family: "Maven Pro",Arial,Helvetica,sans-serif;
-    font-weight: 300;
-    font-size: 18px;
-    color: white;
-    width: 700px;
-    height: 500px;
-    margin: 10px;
-    overflow-x: none;
-    overflow-y: scroll;
 }
 
 .hidden {
